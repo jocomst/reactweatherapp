@@ -11,6 +11,10 @@ const WeatherBlock = (props) => {
   const [data, getData] = useState([]);
   //states for zipcode input
   const [zipCode, setZip] = useState("");
+  //state for daily forecast
+  const [daily, setDaily] = useState();
+  // state for celsius
+  const [isCelsius, setDegree] = useState(false);
   //api call function
   const weatherCall = async ({ zipCode }) => {
     try {
@@ -19,6 +23,14 @@ const WeatherBlock = (props) => {
       );
       const parsedData = await rawData.json();
       getData(parsedData);
+
+      console.log(parsedData);
+      const { lat, lon } = parsedData.coord;
+      const castData = await fetch(
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${key}`
+      );
+      const parsedCast = await castData.json();
+      setDaily(parsedCast);
     } catch (e) {
       console.error(new Error(e));
     }
@@ -26,6 +38,13 @@ const WeatherBlock = (props) => {
 
   return (
     <div className="weather-box">
+      <div className="mini-container">
+        <ThreeDayForeCast
+          data={daily}
+          isCelsius={isCelsius}
+          setDegree={setDegree}
+        />
+      </div>
       <div className="container">
         <div>
           <h2>Search by zipcode</h2>
@@ -38,7 +57,11 @@ const WeatherBlock = (props) => {
           />
           <button onMouseDown={() => weatherCall({ zipCode })}>Search</button>
           <div>
-            <WeatherDisplay data={data} />
+            <WeatherDisplay
+              data={data}
+              isCelsius={isCelsius}
+              setDegree={setDegree}
+            />
           </div>
         </div>
       </div>

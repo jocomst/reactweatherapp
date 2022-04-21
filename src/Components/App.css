@@ -23,6 +23,17 @@ body {
   border-radius: 20px;
 }
 
+.mini-container {
+  display: flex;
+  padding: 2rem;
+  margin: 1rem;
+  border: 3px solid blue;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 20px;
+  flex-direction: column;
+}
+
 .weather-box {
   display: flex;
   justify-content: center;
